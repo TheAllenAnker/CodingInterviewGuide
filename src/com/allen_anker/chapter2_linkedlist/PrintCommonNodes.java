@@ -26,14 +26,7 @@ public class PrintCommonNodes {
         }
 
         if (curr1 == curr2) {
-            while (curr1 != null) {
-                System.out.print(curr1.val);
-                curr1 = curr1.next;
-                if (curr1 != null) {
-                    System.out.print("->");
-                }
-            }
-            System.out.println();
+            LinkedListUtils.printLinkedListBeautifully(curr1);
         }
     }
 
