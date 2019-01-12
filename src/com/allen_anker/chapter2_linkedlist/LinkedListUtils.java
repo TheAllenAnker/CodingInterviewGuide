@@ -12,4 +12,19 @@ public class LinkedListUtils {
         }
         System.out.println();
     }
+
+    public static int getLinkedListSize(ListNode head) {
+        if (head == null) {
+            return 0;
+        }
+
+        ListNode curr = head;
+        int size = 0;
+        while (curr != null) {
+            size++;
+            curr = curr.next;
+        }
+
+        return size;
+    }
 }
