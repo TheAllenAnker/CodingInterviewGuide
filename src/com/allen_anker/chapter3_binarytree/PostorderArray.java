@@ -3,6 +3,38 @@ package com.allen_anker.chapter3_binarytree;
 import com.allen_anker.chapter1_stackandqueue.TreeNode;
 
 public class PostorderArray {
+    public static TreeNode buildTreeFromPostorderArr(int[] values) {
+        if (values == null || values.length == 0) {
+            return null;
+        }
+        if (!isPostorderArrayOfABST(values)) {
+            throw new IllegalArgumentException("Invalid parameter: arr values is not a valid arr");
+        }
+
+        return postToBST(values, 0, values.length - 1);
+    }
+
+    private static TreeNode postToBST(int[] values, int start, int end) {
+        if (start > end) {
+            return null;
+        }
+
+        TreeNode head = new TreeNode(values[end]);
+        int smaller = -1;
+        int bigger = end;
+        for (int i = 0; i < end; i++) {
+            if (values[i] < values[end]) {
+                smaller = i;
+            } else {
+                bigger = bigger == end ? i : bigger;
+            }
+        }
+        head.left = postToBST(values, start, smaller);
+        head.right = postToBST(values, bigger, end - 1);
+
+        return head;
+    }
+
     /**
      * In post-order traversal, the last element in tree must be the root of the current sub-tree.
      *
@@ -55,5 +87,6 @@ public class PostorderArray {
         BinaryTreeTraversal.printPostorder(root);
         System.out.println(isPostorderArrayOfABST(value));
         System.out.println(isPostorderArrayOfABST(new int[]{1, 5, 3, 4}));
+        TreeUtils.printTreeBeautifully(buildTreeFromPostorderArr(value));
     }
 }
