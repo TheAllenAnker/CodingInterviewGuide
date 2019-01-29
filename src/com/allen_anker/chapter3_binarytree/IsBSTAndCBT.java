@@ -2,6 +2,8 @@ package com.allen_anker.chapter3_binarytree;
 
 import com.allen_anker.chapter1_stackandqueue.TreeNode;
 
+import java.util.LinkedList;
+
 public class IsBSTAndCBT {
     /**
      * Determine if a given binary tree is a complete binary tree.
@@ -14,7 +16,31 @@ public class IsBSTAndCBT {
             return true;
         }
 
-        return false;
+        LinkedList<TreeNode> nodeQueue = new LinkedList<>();
+        nodeQueue.offer(root);
+        boolean allLeafsFlag = false;
+        TreeNode curr, left, right;
+        while (!nodeQueue.isEmpty()) {
+            curr = nodeQueue.poll();
+            left = curr.left;
+            right = curr.right;
+            if (allLeafsFlag && (left != null || right != null)) {
+                return false;
+            }
+            if (right != null && left == null) {
+                return false;
+            }
+            if (left != null) {
+                nodeQueue.offer(left);
+            }
+            if (right == null) {
+                allLeafsFlag = true;
+            } else {
+                nodeQueue.offer(right);
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -66,6 +92,10 @@ public class IsBSTAndCBT {
         root.right.left = new TreeNode(5);
         root.right.right = new TreeNode(7);
         TreeUtils.printTreeBeautifully(root);
-        System.out.println(isBST(root));
+        System.out.println("Is BST: " + isBST(root));
+        System.out.println("Is CBT: " + isCBT(root));
+        root.left = null;
+        TreeUtils.printTreeBeautifully(root);
+        System.out.println("Is CBT: " + isCBT(root));
     }
 }
