@@ -30,8 +30,10 @@ public class RebuildWithTraversal {
         int value = pre[preStart];
         TreeNode head = new TreeNode(value);
         int index = indexMap.get(value);
-        head.left = preAndIn(pre, preStart + 1, preStart + index - inStart, in, inStart, index - 1, indexMap);
-        head.right = preAndIn(pre, preStart + index - inStart + 1, preEnd, in, index + 1, inEnd, indexMap);
+        head.left = preAndIn(pre, preStart + 1, preStart + index - inStart,
+                in, inStart, index - 1, indexMap);
+        head.right = preAndIn(pre, preStart + index - inStart + 1, preEnd,
+                in, index + 1, inEnd, indexMap);
 
         return head;
     }
@@ -41,7 +43,29 @@ public class RebuildWithTraversal {
             throw new IllegalArgumentException("Invalid parameter");
         }
 
-        return null;
+        HashMap<Integer, Integer> indexMap = new HashMap<>();
+        for (int i = 0; i < in.length; i++) {
+            indexMap.put(in[i], i);
+        }
+
+        return inAndPost(in, 0, in.length - 1, post, 0, post.length - 1, indexMap);
+    }
+
+    private static TreeNode inAndPost(int[] in, int inStart, int inEnd, int[] post, int postStart, int postEnd,
+                                      HashMap<Integer, Integer> indexMap) {
+        if (inStart > inEnd) {
+            return null;
+        }
+
+        int val = post[postEnd];
+        TreeNode head = new TreeNode(val);
+        int index = indexMap.get(val);
+        head.left = inAndPost(in, inStart, index - 1,
+                post, postStart, postStart + index - inStart - 1, indexMap);
+        head.right = inAndPost(in, index + 1, inEnd,
+                post, postStart + index - inStart, postEnd - 1, indexMap);
+
+        return head;
     }
 
     public static TreeNode rebuildWithPreAndPostOrderTraversal(int[] pre, int[] post) {
@@ -58,5 +82,7 @@ public class RebuildWithTraversal {
         int[] post = {4, 8, 9, 5, 2, 6, 7, 3, 1};
         TreeNode head1 = rebuildWithPreAndInOrderTraversal(pre, in);
         TreeUtils.printTreeBeautifully(head1);
+        TreeNode head2 = rebuildWithInAndPostOrderTraversal(in, post);
+        TreeUtils.printTreeBeautifully(head2);
     }
 }
