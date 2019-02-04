@@ -68,12 +68,40 @@ public class RebuildWithTraversal {
         return head;
     }
 
+    /**
+     * Except for leaf nodes, all nodes in the binary tree must have both left and right nodes.
+     *
+     * @param pre
+     * @param post
+     * @return
+     */
     public static TreeNode rebuildWithPreAndPostOrderTraversal(int[] pre, int[] post) {
         if (pre == null || post == null || pre.length != post.length) {
             throw new IllegalArgumentException("Invalid parameter");
         }
 
-        return null;
+        HashMap<Integer, Integer> indexMap = new HashMap<>();
+        for (int i = 0; i < post.length; i++) {
+            indexMap.put(post[i], i);
+        }
+
+        return preAndPost(pre, 0, pre.length - 1, post, 0, post.length - 1, indexMap);
+    }
+
+    private static TreeNode preAndPost(int[] pre, int preStart, int preEnd, int[] post, int postStart, int postEnd,
+                                       HashMap<Integer, Integer> indexMap) {
+        TreeNode head = new TreeNode(post[postEnd--]);
+        if (preStart == preEnd) {
+            return head;
+        }
+
+        int index = indexMap.get(pre[++preStart]);
+        head.left = preAndPost(pre, preStart, preStart + index - postStart,
+                post, postStart, index, indexMap);
+        head.right = preAndPost(pre, preStart + index - postStart + 1, preEnd,
+                post, index + 1, postEnd, indexMap);
+
+        return head;
     }
 
     public static void main(String[] args) {
@@ -84,5 +112,7 @@ public class RebuildWithTraversal {
         TreeUtils.printTreeBeautifully(head1);
         TreeNode head2 = rebuildWithInAndPostOrderTraversal(in, post);
         TreeUtils.printTreeBeautifully(head2);
+        TreeNode head3 = rebuildWithPreAndPostOrderTraversal(pre, post);
+        TreeUtils.printTreeBeautifully(head3);
     }
 }
