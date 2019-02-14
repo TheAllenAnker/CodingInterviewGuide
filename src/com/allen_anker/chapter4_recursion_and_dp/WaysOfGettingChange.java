@@ -3,6 +3,33 @@ package com.allen_anker.chapter4_recursion_and_dp;
 import java.util.HashMap;
 
 public class WaysOfGettingChange {
+    public static int waysOfGettingChange3(int[] arr, int aim) {
+        if (arr == null || arr.length == 0 || aim < 0) {
+            throw new IllegalArgumentException("Invalid parameter(s)");
+        }
+        if (aim == 0) {
+            return 1;
+        }
+
+        int length = arr.length;
+        int[][] dp = new int[length][aim + 1];
+        for (int i = 0; i < length; i++) {
+            dp[i][0] = 1;
+        }
+        for (int i = 0; i < aim + 1; i += arr[0]) {
+            dp[0][i] = 1;
+        }
+        for (int i = 1; i < length; i++) {
+            for (int j = 1; j < aim + 1; j++) {
+                for (int k = j; k >= 0; k -= arr[i]) {
+                    dp[i][j] += dp[i - 1][k];
+                }
+            }
+        }
+
+        return dp[length - 1][aim];
+    }
+
     public static int waysOfGettingChange2(int[] arr, int aim) {
         if (arr == null || arr.length == 0 || aim < 0) {
             throw new IllegalArgumentException("Invalid parameter(s)");
@@ -59,5 +86,6 @@ public class WaysOfGettingChange {
         int[] arr = {5, 10, 25, 1};
         System.out.println(waysOfGettingChange1(arr, 15));
         System.out.println(waysOfGettingChange2(arr, 15));
+        System.out.println(waysOfGettingChange3(arr, 15));
     }
 }
