@@ -1,6 +1,6 @@
 package com.allen_anker.chapter4_recursion_and_dp;
 
-public class LongestCommonSubArr {
+public class LongestCommonSubSeq {
     public static String longestCommonSubArr(String str1, String str2) {
         if (str1 == null || str2 == null) {
             return null;
